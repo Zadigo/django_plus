@@ -1,0 +1,18 @@
+{
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.unusedImports": "always",
+            "source.fixAll.pylance": "always"
+        }
+    },
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.cwd": "${workspaceFolder}",
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        ".",
+        "-p",
+        "*test*.py"
+    ]
+}
