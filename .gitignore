@@ -12,3 +12,4 @@ wheels/
 tests/media/
 tmp/
 staticfiles/
+*.csv
