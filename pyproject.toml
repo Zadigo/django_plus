@@ -70,3 +70,6 @@ reportUntypedBaseClass = true
 
 [tool.pytest_env]
 env_files = [".env", ".env.test"]
+
+[tool.setuptools]
+packages = ["django_plus"]

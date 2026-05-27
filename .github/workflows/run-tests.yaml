@@ -4,6 +4,10 @@ on:
       - main
 
 jobs:
+  check-label:
+    if: ${{ github.event.ref == 'refs/heads/release' }}
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
   onubuntu-latest:
     runs-on: ubuntu-latest
     strategy:

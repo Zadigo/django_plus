@@ -13,3 +13,4 @@ tests/media/
 tmp/
 staticfiles/
 *.csv
+cov_html/
