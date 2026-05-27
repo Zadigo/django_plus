@@ -9,7 +9,7 @@ structure.
 This command can optionally do the following but it is off by default:
 * gzip compress any CSS and Javascript files it finds and adds the appropriate
   'Content-Encoding' header.
-* set a far future 'Expires' header for optimal caching.
+* semedia_routet a far future 'Expires' header for optimal caching.
 * upload only media or static files.
 * use any other provider compatible with Amazon S3.
 * set other than 'public-read' ACL.

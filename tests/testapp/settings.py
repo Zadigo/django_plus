@@ -49,7 +49,7 @@ DATABASES = {
 
 SITE_ID = 1
 
-MEDIA_ROOT = '/tmp/django_plus/'
+MEDIA_ROOT = BASE_DIR / 'django_plus/tmp/'
 
 MEDIA_PATH = '/media/'
 

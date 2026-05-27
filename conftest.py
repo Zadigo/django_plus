@@ -30,5 +30,6 @@ def pytest_configure(config):
             # AUTH_USER_MODEL='auth.User',
             ROOT_URLCONF='tests.testapp.urls',
             DEFAULT_AUTO_FIELD='django.db.models.BigAutoField',
+            MEDIA_ROOT='/django_plus/tmp/',
             STATIC_URL='/static/'
         )

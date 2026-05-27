@@ -7,7 +7,7 @@ from django_plus.management.utils import signalcommand
 
 
 class Command(BaseCommand):
-    help = "Generates a new SECRET_KEY that can be used in a project settings file."
+    help = 'Generates a new SECRET_KEY that can be used in a project settings file.'
 
     requires_system_checks: Sequence[str] = []
 
