@@ -44,7 +44,7 @@ class Command(BaseCommand):
                 files = structure[item.parent]
                 files.append(
                     '[FILE] ' +
-                    self.style.NOTICE(
+                    self.style.HTTP_INFO(
                         str(item.relative_to(media_root)))
                 )
 
