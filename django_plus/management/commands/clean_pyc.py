@@ -41,6 +41,9 @@ class Command(BaseCommand):
         if custom_dir is None:
             custom_dir: pathlib.Path = getattr(settings, 'BASE_DIR', None)
 
+        if isinstance(custom_dir, str):
+            custom_dir = getattr(settings, 'BASE_DIR').joinpath(custom_dir)
+
         if custom_dir is None:
             raise CommandError(
                 'No path provided and BASE_DIR not set in settings.'
@@ -54,10 +57,12 @@ class Command(BaseCommand):
             items = custom_dir.rglob('*.pyo')
             iterators.append(items)
 
+        count = 0
         for iterator in iterators:
             for item in iterator:
                 if options.get('dry_run', False):
-                    self.stdout.write(f'Would remove: {item}')
+                    self.stdout.write(f'- {self.style.WARNING(item)}')
+                    count += 1
                     continue
                 # else:
                 #     try:
@@ -65,3 +70,8 @@ class Command(BaseCommand):
                 #         self.stdout.write(f'Removed: {item}')
                 #     except Exception as e:
                 #         self.stderr.write(f'Error removing {item}: {e}')
+        self.stdout.write(
+            self.style.SUCCESS(
+                f'Found {count} files to remove.'
+            )
+        )
