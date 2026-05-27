@@ -143,11 +143,11 @@ class CreationDateTimeField(models.DateTimeField):
         kwargs.setdefault('blank', True)
         kwargs.setdefault('editable', False)
         kwargs.setdefault(
-            'auto_now', 
+            'auto_now',
             True if not self._is_creation_datetime else False
         )
         kwargs.setdefault(
-            'auto_now_add', 
+            'auto_now_add',
             True if self._is_creation_datetime else False
         )
         super().__init__(*args, **kwargs)

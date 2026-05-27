@@ -1,9 +1,10 @@
 [project]
 name = "django-plus"
 version = "0.1.0"
-description = "Add your description here"
+description = "An application that provides a set of tools and utilities to enhance the development experience with Django."
 readme = "README.md"
 requires-python = ">=3.14"
+keywords = ["django", "python", "web development", "utilities", "tools"]
 dependencies = [
     "boto3>=1.43.15",
     "django>=6.0.5",
@@ -11,6 +12,32 @@ dependencies = [
     "httpx>=0.28.1",
     "pyyaml>=6.0.3",
 ]
+authors = [
+  {name = "John Pendenque", email = "pendenquejohn@gmail.com"},
+]
+maintainers = [
+  {name = "John Pendenque", email = "pendenquejohn@gmail.com"}
+]
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Operating System :: POSIX",
+  "Operating System :: Unix",
+  "Operating System :: Microsoft :: Windows",
+  "Intended Audience :: Developers",
+  "Topic :: Internet",
+  "Topic :: Internet :: WWW/HTTP",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.14",
+  "Natural Language :: English",
+  "Operating System :: Microsoft :: Windows :: Windows 11",
+  "Operating System :: MacOS"
+]
+
+[project.urls]
+Homepage = "https://github.com/Zadigo/django_plus"
+Documentation = "https://github.com/Zadigo/django_plus/wiki"
+Repository = "https://github.com/Zadigo/django_plus.git"
+Changelog = "https://github.com/Zadigo/django_plus/blob/main/CHANGELOG.md"
 
 [dependency-groups]
 dev = [
