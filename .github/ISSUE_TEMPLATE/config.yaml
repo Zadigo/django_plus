@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📚 Django Plus Documentation
+    url: https://github.com/Zadigo/django_plus#readme
+    about: Check the documentation for usage of Django Plus
