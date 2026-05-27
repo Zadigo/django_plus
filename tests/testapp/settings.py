@@ -9,6 +9,29 @@ BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = 'dummy'
 
+DEBUG = True
+
+ROOT_URLCONF = 'tests.testapp.urls'
+
+TEMPLATE_DEBUG = True
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug': TEMPLATE_DEBUG,
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
 # TEST_RUNNER = 'tests.runner.PytestTestRunner'
 
 INSTALLED_APPS = [
@@ -49,32 +72,11 @@ DATABASES = {
 
 SITE_ID = 1
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 MEDIA_ROOT = BASE_DIR / 'django_plus/tmp/'
 
 MEDIA_PATH = '/media/'
-
-ROOT_URLCONF = 'tests.testapp.urls'
-
-DEBUG = True
-
-TEMPLATE_DEBUG = True
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'debug': TEMPLATE_DEBUG,
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 STATIC_URL = '/static/'
 
