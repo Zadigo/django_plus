@@ -8,6 +8,7 @@ dependencies = [
     "boto3>=1.43.15",
     "django>=6.0.5",
     "django-environ>=0.13.0",
+    "pyyaml>=6.0.3",
 ]
 
 [dependency-groups]
