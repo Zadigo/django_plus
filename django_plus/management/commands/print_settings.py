@@ -36,12 +36,6 @@ class Command(BaseCommand):
             help='Group settings by Django and custom settings.'
         )
 
-    def _get_text_display(self, key, value, show_types=False):
-        if show_types:
-            return f'+ {self.style.SUCCESS(key)}: {type(value).__name__}'
-        else:
-            return f'+ {self.style.SUCCESS(key)}: {value}'
-
     @signalcommand
     def handle(self, *args, **options):
         # Get all setting keys from the global settings which will
@@ -88,6 +82,7 @@ class Command(BaseCommand):
                                 template['django'].append((setting, value))
                             else:
                                 template['custom'].append((setting, value))
+
                     for group, items in template.items():
                         self.stdout.write(
                             self.style.NOTICE(
@@ -108,3 +103,9 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.WARNING(
             f'Total settings: {len(setting_keys)}, Displayed: {count}'))
+
+    def _get_text_display(self, key, value, show_types=False):
+        if show_types:
+            return f'+ {self.style.SUCCESS(key)}: {type(value).__name__}'
+        else:
+            return f'+ {self.style.SUCCESS(key)}: {value}'

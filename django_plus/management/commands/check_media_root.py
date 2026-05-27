@@ -14,6 +14,7 @@ class Command(BaseCommand):
     @signalcommand
     def handle(self, *args, **options):
         media_root: pathlib.Path = getattr(settings, 'MEDIA_ROOT', None)
+        print(media_root)
         if isinstance(media_root, str):
             base_dir = getattr(settings, 'BASE_DIR', None)
             if base_dir is not None:
@@ -85,4 +86,6 @@ class Command(BaseCommand):
                 )
             )
             for f in unreferenced_files:
-                self.stdout.write(f'- {f.relative_to(media_root)}')
+                self.stdout.write(
+                    self.style.WARNING('- ') + str(f.relative_to(media_root))
+                )

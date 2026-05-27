@@ -40,11 +40,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         model_types = apps.get_models(
-            include_auto_created=True, include_swapped=True)
+            include_auto_created=True, 
+            include_swapped=True
+        )
         models_map = {id(model): model for model in model_types}
 
-        signals = [item for item in gc.get_objects(
-        ) if isinstance(item, ModelSignal)]
+        signals = [
+            item for item in gc.get_objects() 
+            if isinstance(item, ModelSignal)
+        ]
+        
         models = defaultdict(lambda: defaultdict(list))
 
         for signal in signals:
