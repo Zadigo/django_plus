@@ -1,11 +1,12 @@
 
+import pathlib
+import re
+from collections.abc import Iterator
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from django_plus.management.utils import signalcommand
-import pathlib
-from typing import Iterator
-import re
 
+from django_plus.management.utils import signalcommand
 
 START_REGEX = re.compile(
     r"\{?#[\s]*?(TODO|FIXME|BUG|HACK|WARNING|NOTE|XXX)[\s:]?(.+)"
@@ -37,7 +38,7 @@ class Command(BaseCommand):
             if lines:
                 for line in lines:
                     self.stdout.write(
-                        self.style.SUCCESS(f"   + ") + line
+                        self.style.SUCCESS("   + ") + line
                     )
 
     def _iterate_files(self, files: Iterator[pathlib.Path]):
@@ -46,7 +47,7 @@ class Command(BaseCommand):
         _files = list(files)
         if len(_files) > 0:
             self.stdout.write(f'Collecting notes from {len(_files)} files...')
-        
+
         for file in _files:
             with file.open() as f:
                 linenumber = 0

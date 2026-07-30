@@ -64,7 +64,6 @@ import os
 import pathlib
 import time
 from io import BytesIO
-from typing import Optional
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
@@ -77,8 +76,7 @@ try:
     import boto3
     import boto3.exceptions
     from boto3.s3 import transfer
-    from botocore.exceptions import (BotoCoreError, ClientError,
-                                     NoCredentialsError)
+    from botocore.exceptions import BotoCoreError, ClientError, NoCredentialsError
 except ImportError:
     HAS_BOTO = False
 else:
@@ -86,11 +84,11 @@ else:
 
 
 class Command(BaseCommand):
-    AWS_S3_ACCESS_KEY_ID: Optional[str] = None
-    AWS_S3_SECRET_ACCESS_KEY: Optional[str] = None
-    AWS_STORAGE_BUCKET_NAME: Optional[str] = None
-    AWS_S3_REGION_NAME: Optional[str] = None
-    AWS_CLOUDFRONT_DISTRIBUTION: Optional[str] = None
+    AWS_S3_ACCESS_KEY_ID: str | None = None
+    AWS_S3_SECRET_ACCESS_KEY: str | None = None
+    AWS_STORAGE_BUCKET_NAME: str | None = None
+    AWS_S3_REGION_NAME: str | None = None
+    AWS_CLOUDFRONT_DISTRIBUTION: str | None = None
 
     SYNC_S3_RENAME_GZIP_EXT: str = ''
 
@@ -123,8 +121,8 @@ class Command(BaseCommand):
         self.upload_count = 0
         self.uploaded_files: list[str] = []
         self.request_cloudfront_invalidation = False
-        self.default_acl: Optional[str] = None
-        self.using_dir: Optional[str] = None
+        self.default_acl: str | None = None
+        self.using_dir: str | None = None
 
     @signalcommand
     def handle(self, *args, **options):
@@ -371,9 +369,7 @@ class Command(BaseCommand):
 
         extra_args = {'ContentType': 'application/octet-stream'}
         extra_args.update(
-            **{
-                'ACL': 'public-read'
-            }
+            ACL='public-read'
         )
 
         is_dry_run = params.get('dry_run', False)
@@ -422,7 +418,7 @@ class Command(BaseCommand):
                         Bucket=self.AWS_STORAGE_BUCKET_NAME,
                         Key=file_key
                     )
-                except ClientError as e:
+                except ClientError:
                     # If the file does not exist in the bucket,
                     # head_object will return a 404 error
                     # we can safely ignore this and proceed
@@ -436,7 +432,7 @@ class Command(BaseCommand):
                         file_timestamp = os.stat(fullpath).st_mtime
                         file_datetime = datetime.datetime.fromtimestamp(
                             file_timestamp,
-                            tz=datetime.timezone.utc
+                            tz=datetime.UTC
                         )
 
                         if file_datetime < s3_last_modified:
@@ -451,7 +447,7 @@ class Command(BaseCommand):
 
             content_type = mimetypes.guess_type(filename)[0]
             if content_type:
-                extra_args.update(**{'ContentType': content_type})
+                extra_args.update(ContentType=content_type)
 
             with open(fullpath, mode='rb') as f:
                 file_size = os.fstat(f.fileno()).st_size
@@ -524,10 +520,10 @@ class Command(BaseCommand):
                             Key=file_key,
                             ExtraArgs=extra_args
                         )
-                except ClientError as e:
+                except ClientError:
                     self.stdout.write(self.style.ERROR(
                         f"Failed to upload file: {filename}"))
-                except (ClientError, NoCredentialsError, BotoCoreError) as e:
+                except (NoCredentialsError, BotoCoreError) as e:
                     self.stdout.write(self.style.ERROR(str(e)))
                     raise
                 else:

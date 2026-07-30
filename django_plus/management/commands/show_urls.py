@@ -1,14 +1,15 @@
 
-from typing import Callable
-import re
+import enum
 import functools
+import re
+from collections import defaultdict
+from collections.abc import Callable
+
 from django.conf import settings
 from django.contrib.admindocs.views import simplify_regex
-from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ViewDoesNotExist
+from django.core.management.base import BaseCommand, CommandError
 from django.urls import URLPattern, URLResolver
-import enum
-from collections import defaultdict
 
 
 class FormatStyle(enum.Enum):

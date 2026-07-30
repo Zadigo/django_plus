@@ -1,9 +1,11 @@
-from django.core.management.base import BaseCommand
-from typing import Sequence
-from django.contrib.auth import get_user_model
+from collections.abc import Sequence
 from enum import Enum
-from django_plus.typings import UserModelValuesQueryset
+
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
+
+from django_plus.typings import UserModelValuesQueryset
 
 
 class ExportFormat(Enum):

@@ -1,11 +1,12 @@
-from django.core.management.base import BaseCommand
-from django_plus.management.utils import signalcommand
-from django.conf import settings
 import pathlib
 from collections import defaultdict
+
 from django.apps import apps
+from django.conf import settings
+from django.core.management.base import BaseCommand
 from django.db import models
-from typing import DefaultDict
+
+from django_plus.management.utils import signalcommand
 
 
 class Command(BaseCommand):
@@ -63,7 +64,7 @@ class Command(BaseCommand):
                 self.stdout.write(f'+ {item}')
 
         # Get all the FileField for each model
-        model_dict: DefaultDict[models.Model,
+        model_dict: defaultdict[models.Model,
                                 list[models.FileField]] = defaultdict(list)
         for model in apps.get_models():
             for field in model._meta.fields:

@@ -1,10 +1,11 @@
-from django.core.management.base import BaseCommand, CommandError
-from django_plus.management.utils import signalcommand
-from typing import Sequence
-from typing import Optional
+from collections.abc import Sequence
+
+from django.conf import settings
 from django.core.cache import DEFAULT_CACHE_ALIAS, caches
 from django.core.cache.backends.base import InvalidCacheBackendError
-from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+
+from django_plus.management.utils import signalcommand
 
 
 class Command(BaseCommand):
@@ -28,7 +29,7 @@ class Command(BaseCommand):
         )
 
     @signalcommand
-    def handle(self, cache: Optional[str] = None, all_caches: bool = False, *args, **kwargs):
+    def handle(self, cache: str | None = None, all_caches: bool = False, *args, **kwargs):
         if cache is None and not all_caches:
             cache = [DEFAULT_CACHE_ALIAS]
         elif cache is not None and all_caches:

@@ -1,8 +1,10 @@
-from django.core.management.base import BaseCommand, CommandError
-from django_plus.management.utils import signalcommand
-from django.conf import settings
 import pathlib
-from typing import Iterator, Sequence
+from collections.abc import Iterator, Sequence
+
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+
+from django_plus.management.utils import signalcommand
 
 
 class Command(BaseCommand):
@@ -42,7 +44,7 @@ class Command(BaseCommand):
             custom_dir: pathlib.Path = getattr(settings, 'BASE_DIR', None)
 
         if isinstance(custom_dir, str):
-            custom_dir = getattr(settings, 'BASE_DIR').joinpath(custom_dir)
+            custom_dir = settings.BASE_DIR.joinpath(custom_dir)
 
         if custom_dir is None:
             raise CommandError(

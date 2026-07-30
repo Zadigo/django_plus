@@ -1,9 +1,11 @@
-from django.core.management.base import BaseCommand
-from django_plus.management.utils import signalcommand
-from django.conf import settings, global_settings
-import pprint
 import json
+import pprint
+
 import yaml
+from django.conf import global_settings, settings
+from django.core.management.base import BaseCommand
+
+from django_plus.management.utils import signalcommand
 
 
 class Command(BaseCommand):
@@ -86,11 +88,12 @@ class Command(BaseCommand):
                     for group, items in template.items():
                         self.stdout.write(
                             self.style.NOTICE(
-                                    f'{group.upper()} SETTINGS:'
-                                )
+                                f'{group.upper()} SETTINGS:'
                             )
+                        )
                         for setting, value in items:
-                            text = self._get_text_display(setting, value, show_types)
+                            text = self._get_text_display(
+                                setting, value, show_types)
                             self.stdout.write(f'\t{text}')
                 else:
                     for setting in setting_keys:
@@ -98,7 +101,8 @@ class Command(BaseCommand):
                             count += 1
                             value = getattr(settings, setting)
 
-                            text = self._get_text_display(setting, value, show_types)
+                            text = self._get_text_display(
+                                setting, value, show_types)
                             self.stdout.write(text)
 
         self.stdout.write(self.style.WARNING(

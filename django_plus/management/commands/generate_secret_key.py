@@ -1,4 +1,4 @@
-from typing import Sequence
+from collections.abc import Sequence
 
 from django.core.management.base import BaseCommand
 from django.core.management.utils import get_random_secret_key

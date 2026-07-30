@@ -5,22 +5,22 @@ import gc
 import inspect
 import weakref
 from collections import defaultdict
-from django.utils.encoding import force_str
+
 from django.apps import apps
 from django.core.management.base import BaseCommand
 from django.db.models.signals import (
     ModelSignal,
-    pre_init,
+    m2m_changed,
+    post_delete,
     post_init,
-    pre_save,
+    post_migrate,
     post_save,
     pre_delete,
-    post_delete,
-    m2m_changed,
+    pre_init,
     pre_migrate,
-    post_migrate,
+    pre_save,
 )
-
+from django.utils.encoding import force_str
 
 SIGNAL_NAMES = {
     pre_init: 'pre_init',
@@ -40,16 +40,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         model_types = apps.get_models(
-            include_auto_created=True, 
+            include_auto_created=True,
             include_swapped=True
         )
         models_map = {id(model): model for model in model_types}
 
         signals = [
-            item for item in gc.get_objects() 
+            item for item in gc.get_objects()
             if isinstance(item, ModelSignal)
         ]
-        
+
         models = defaultdict(lambda: defaultdict(list))
 
         for signal in signals:

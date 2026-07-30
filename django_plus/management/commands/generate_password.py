@@ -1,6 +1,7 @@
-from typing import Sequence
-from django.core.management.base import BaseCommand, CommandError
+from collections.abc import Sequence
+
 from django.contrib.auth import password_validation
+from django.core.management.base import BaseCommand, CommandError
 from django.utils.crypto import get_random_string
 
 

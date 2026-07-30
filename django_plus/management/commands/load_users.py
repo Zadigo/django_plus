@@ -1,10 +1,12 @@
-import pathlib
 import csv
-from django.db import models
-from django.core.management.base import BaseCommand, CommandError
-from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
+import pathlib
+
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand, CommandError
+from django.db import models
+
 from django_plus.management.utils import signalcommand
 
 
@@ -58,7 +60,7 @@ class Command(BaseCommand):
                 'You cannot provide both a file path and a URL to load the users from. Please choose one.'
             )
 
-        base_dir: pathlib.Path = getattr(settings, 'BASE_DIR')
+        base_dir: pathlib.Path = settings.BASE_DIR
         file_path: pathlib.Path = base_dir.joinpath(f'{file_path}.csv')
 
         base_fields = ['first_name', 'last_name', 'email', 'username']
@@ -100,7 +102,8 @@ class Command(BaseCommand):
                                 )
                             )
 
-                            user_model.objects.filter(email=row['email']).update(**defaults)
+                            user_model.objects.filter(
+                                email=row['email']).update(**defaults)
                             user = qs.get()
                         else:
                             user = user_model.objects.create_user(**defaults)

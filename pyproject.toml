@@ -9,7 +9,7 @@ dependencies = [
     "boto3>=1.43.15",
     "django>=6.0.5",
     "django-environ>=0.13.0",
-    "httpx>=0.28.1",
+    "httpx2>=2.9.1",
     "pyyaml>=6.0.3",
 ]
 authors = [
@@ -33,12 +33,6 @@ classifiers = [
   "Operating System :: MacOS"
 ]
 
-[project.urls]
-Homepage = "https://github.com/Zadigo/django_plus"
-Documentation = "https://github.com/Zadigo/django_plus/wiki"
-Repository = "https://github.com/Zadigo/django_plus.git"
-Changelog = "https://github.com/Zadigo/django_plus/blob/main/CHANGELOG.md"
-
 [dependency-groups]
 dev = [
     "autopep8>=2.3.2",
@@ -54,7 +48,14 @@ dev = [
     "pytest-env>=1.6.0",
     "pytest-playwright>=0.8.0",
     "pytest-timeout>=2.4.0",
+    "ruff>=0.16.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Zadigo/django_plus"
+Documentation = "https://github.com/Zadigo/django_plus/wiki"
+Repository = "https://github.com/Zadigo/django_plus.git"
+Changelog = "https://github.com/Zadigo/django_plus/blob/main/CHANGELOG.md"
 
 [tool.pytest.ini_options]
 addopts = [
