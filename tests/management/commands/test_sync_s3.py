@@ -1,9 +1,8 @@
 import pathlib
-from django.test import TestCase
 from unittest.mock import Mock, patch
-from django.core.management import call_command, CommandError
-from django.test import override_settings
 
+from django.core.management import CommandError, call_command
+from django.test import TestCase, override_settings
 
 TEST_DIR = pathlib.Path(__file__).parent.parent.parent.absolute()
 

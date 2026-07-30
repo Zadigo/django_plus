@@ -1,8 +1,8 @@
-from django.test import TestCase, override_settings
-from django.core.management import call_command
-from io import StringIO
 import pathlib
+from io import StringIO
 
+from django.core.management import call_command
+from django.test import TestCase, override_settings
 
 TEST_DIR = pathlib.Path(__file__).parent.parent.parent.parent.absolute()
 

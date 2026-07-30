@@ -1,8 +1,9 @@
+from io import StringIO
+from unittest.mock import patch
+
+from django.contrib.auth import password_validation
 from django.core.management import call_command
 from django.test import TestCase
-from unittest.mock import patch
-from io import StringIO
-from django.contrib.auth import password_validation
 
 
 class TestGeneratePasswordCommand(TestCase):

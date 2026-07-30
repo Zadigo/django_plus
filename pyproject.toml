@@ -27,6 +27,10 @@ classifiers = [
   "Topic :: Internet",
   "Topic :: Internet :: WWW/HTTP",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
   "Natural Language :: English",
   "Operating System :: Microsoft :: Windows :: Windows 11",
@@ -57,23 +61,36 @@ Documentation = "https://github.com/Zadigo/django_plus/wiki"
 Repository = "https://github.com/Zadigo/django_plus.git"
 Changelog = "https://github.com/Zadigo/django_plus/blob/main/CHANGELOG.md"
 
-[tool.pytest.ini_options]
-addopts = [
-    "--cov=django_plus",
-    "--cov-report=html:cov_html",
-    "--cov-report=term-missing"
-]
-
 [tool.pyright]
 typeCheckingMode = "off"
 reportMissingImports = true
 reportUntypedBaseClass = true
+
+[tool.pytest]
+timeout="5000"
+markers = [
+  "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+  "api: marks tests as api tests",
+  "integration: marks tests as integration tests",
+  "unit: marks tests as unit tests",
+]
+addopts = [
+  "--cov=django_plus",
+  "--cov-report=html:cov_html",
+  "--cov-report=term-missing"
+]
 
 [tool.pytest_env]
 env_files = [".env", ".env.test"]
 
 [tool.setuptools]
 packages = ["django_plus"]
+
+[tool.autopep8]
+max_line_length = 120
+in-place = true
+recursive = true
+aggressive = 3
 
 [[tool.uv.index]]
 name = "testpypi"

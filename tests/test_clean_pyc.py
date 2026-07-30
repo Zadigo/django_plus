@@ -1,7 +1,8 @@
-from django.core.management import call_command
-from django.test import TestCase
 import os
 import pathlib
+
+from django.core.management import call_command
+from django.test import TestCase
 
 
 class TestCleanPyc(TestCase):
