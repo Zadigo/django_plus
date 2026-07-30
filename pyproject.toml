@@ -75,7 +75,7 @@ markers = [
   "unit: marks tests as unit tests",
 ]
 addopts = [
-  "--cov=django_plus",
+  "--cov=src",
   "--cov-report=html:cov_html",
   "--cov-report=term-missing"
 ]
@@ -97,3 +97,20 @@ name = "testpypi"
 url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
 explicit = true
+
+[tool.coverage.run]
+omit = [
+    "manage.py",
+    "*/migrations/*",
+    "*/__init__.py",
+    "*/typings.py"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]

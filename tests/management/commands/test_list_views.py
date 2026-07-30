@@ -15,5 +15,6 @@ class TestListViewsCommand(TestCase):
         call_command('list_views', stdout=out)
         output = out.getvalue()
 
+        self.assertNotEqual(output, '')
         self.assertIn('App: tests.testapp', output)
         self.assertIn('  - HomeView', output)

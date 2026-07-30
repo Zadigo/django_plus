@@ -1,20 +1,22 @@
 import pathlib
 
 import environ
+from faker import Faker
 
 environ.Env.read_env('../.env')
 
 env = environ.Env()
 
+fake = Faker()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'dummy-insecure-%_vk*gkc-_3f0k)ml9ajehnd+vh)q@^3hwa!lkvb_h8qdmg8qb'
+SECRET_KEY = f'dummy-insecure-{fake.uuid4()}'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -126,7 +128,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_ROOT = BASE_DIR / 'django_plus/tmp/'
 
-MEDIA_PATH = '/media/'
+MEDIA_PATH = BASE_DIR / 'media/'
 
 # SHELL_PLUS_SUBCLASSES_IMPORT_MODULES_BLACKLIST = [
 #     'django_extensions.mongodb.fields',

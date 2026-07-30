@@ -1,12 +1,12 @@
-from django.core.management.base import BaseCommand, CommandError
-from typing import Sequence
+import inspect
+import pathlib
+from collections import defaultdict
+from collections.abc import Iterator, Sequence
+
 from django.apps import apps
 from django.conf import settings
-from typing import Iterator
-import pathlib
-import inspect
+from django.core.management.base import BaseCommand, CommandError
 from django.utils.module_loading import import_string
-from collections import defaultdict
 from django.views import View
 
 
@@ -43,7 +43,11 @@ class Command(BaseCommand):
         listed_views = defaultdict(list)
 
         for app_name in registered_apps:
-            mod = import_string(f'{app_name}.views')
+            try:
+                mod = import_string(f'{app_name}.views')
+            except Exception: # noqa
+                continue
+
             klasses = inspect.getmembers(mod, inspect.isclass)
             for _, klass in klasses:
                 if issubclass(klass, View):

@@ -1,6 +1,7 @@
-from django_plus.management.signals import post_command, pre_command
+from collections.abc import Callable
 from typing import Any
-from typing import Callable
+
+from django_plus.management.signals import post_command, pre_command
 
 
 def signalcommand(func: Callable) -> Callable:

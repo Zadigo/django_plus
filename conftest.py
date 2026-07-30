@@ -1,13 +1,15 @@
 from django.conf import settings
+from faker import Faker
 
+fake = Faker()
 
 def pytest_configure(config):
 
     if not settings.configured:
         settings.configure(
             DEBUG=True,
-            SECRET_KEY='aXDfw6xCDKIFRgz2yzpTgAqFBqVLgSeyOVGayj8KqcJAjG3O96dT7cQPMExxAteX',
-            PY_UTILITIES_JWT_SECRET='zpDaqupaQR7SxrEcsoFYOkZQIdJPEim4Sz30zC5oBFGOZwY92FYvVeqqO3Z5Pw6P',
+            SECRET_KEY=fake.uuid4(),
+            PY_UTILITIES_JWT_SECRET=fake.uuid4(),
             DATABASES={
                 'default': {
                     'ENGINE': 'django.db.backends.sqlite3',
@@ -24,7 +26,6 @@ def pytest_configure(config):
                 'django_plus',
                 'tests.testapp',
             ],
-            # AUTH_USER_MODEL='auth.User',
             ROOT_URLCONF='tests.testapp.urls',
             DEFAULT_AUTO_FIELD='django.db.models.BigAutoField',
             MEDIA_ROOT='/django_plus/tmp/',
