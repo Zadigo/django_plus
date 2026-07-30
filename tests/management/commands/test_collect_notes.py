@@ -15,4 +15,4 @@ class TestCollectNotesCommand(TestCase):
             call_command('collect_notes', stdout=out)
 
             output = out.getvalue()
-            self.assertIn('Collecting notes from', output)
+            self.assertIn('notes from', output)

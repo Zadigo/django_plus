@@ -3,6 +3,7 @@ from enum import Enum
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import FieldError
 from django.core.management.base import BaseCommand
 
 from django_plus.typings import UserModelValuesQueryset
@@ -32,6 +33,7 @@ class Command(BaseCommand):
 
     def _export_address(self, queryset: UserModelValuesQueryset):
         """Returns a string with the email addresses in the format:
+        
         .. text::
             "full name" <my@address.com>;
         """
@@ -78,12 +80,18 @@ class Command(BaseCommand):
             action='store',
             dest='format',
             default=ExportFormat.ADDRESS.value,
-            help='Specifies the export format. Supported formats: ' +
-            ', '.join(EXPORT_FORMATS_MAP)
+            help='Specifies the export format. Supported formats: ' + ', '.join(EXPORT_FORMATS_MAP)
+        )
+        parser.add_argument(
+            '--group',
+            '-g',
+            action='store',
+            dest='group',
+            help='Specifies the group to filter users by.'
         )
 
     def handle(self, *args, **options):
-        group = None
+        group = options.get('group', None)
 
         default_order_by = ['last_name', 'first_name']
         order_by = getattr(
@@ -94,7 +102,7 @@ class Command(BaseCommand):
 
         queryset = self.user_model.objects.order_by(*order_by)
         if group is not None:
-            pass
+            queryset = queryset.filter(groups__name=group)
 
         default_fields = ['first_name', 'last_name', 'email']
         fields = getattr(
@@ -102,6 +110,13 @@ class Command(BaseCommand):
             'DJANGO_PLUS_EXPORT_EMAILS_FIELDS',
             default_fields
         )
-        queryset = queryset.values(*fields)
+
+        try:
+            qs = queryset.values(*fields)
+        except FieldError as e:
+            raise ExceptionGroup(
+                'Error while retrieving user data for export', [e]
+            )
+
         # Call the appropriate export method based on the specified format
-        getattr(self, f'_export_{options["format"]}')(queryset)
+        getattr(self, f'_export_{options["format"]}')(qs)

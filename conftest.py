@@ -4,7 +4,6 @@ from faker import Faker
 fake = Faker()
 
 def pytest_configure(config):
-
     if not settings.configured:
         settings.configure(
             DEBUG=True,

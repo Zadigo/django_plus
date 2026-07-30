@@ -34,31 +34,29 @@ class Command(BaseCommand):
 
         for app in apps:
             fullpath = base_dir.joinpath(app)
-            lines = self._iterate_files(fullpath.rglob('*.py'))
+            lines = self._iterate_files(app, fullpath.rglob('*.py'))
             if lines:
                 for line in lines:
                     self.stdout.write(
                         self.style.SUCCESS("   + ") + line
                     )
 
-    def _iterate_files(self, files: Iterator[pathlib.Path]):
+    def _iterate_files(self, app: str, files: Iterator[pathlib.Path]):
         lines: list[str] = []
 
         _files = list(files)
         if len(_files) > 0:
-            self.stdout.write(f'Collecting notes from {len(_files)} files...')
+            self.stdout.write(f'{len(_files)} notes from "{app}" application:')
 
         for file in _files:
             with file.open() as f:
-                linenumber = 0
-                for line in f.readlines():
-                    linenumber += 1
+                for linenumber, line in enumerate(f.readlines(), start=1):
                     if START_REGEX.search(line):
                         tag, message = START_REGEX.findall(line)[0]
 
                         text = ''
                         if END_REGEX.search(message.strip()):
-                            text = END_REGEX.findall(text.strip())[0][0]
+                            text = END_REGEX.findall(message.strip())[0][0]
                         lines.append(
-                            f'{file}:{linenumber} {tag} {text.strip()}')
+                            f'{file}:{linenumber} [{tag}] {text.strip()}')
         return lines
