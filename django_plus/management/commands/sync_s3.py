@@ -64,6 +64,7 @@ from io import BytesIO
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+from django.utils import timezone
 
 from django_plus.management.utils import signalcommand
 
@@ -443,7 +444,7 @@ class Command(BaseCommand):
                             continue
 
             content_type = mimetypes.guess_type(filename)[0]
-            if content_type:
+            if content_type is not None:
                 extra_args.update(ContentType=content_type)
 
             with open(fullpath, mode='rb') as f:
@@ -477,7 +478,7 @@ class Command(BaseCommand):
                 if self.expires:
                     time_value = time.mktime(
                         (
-                            datetime.datetime.now() +
+                            timezone.now() +
                             datetime.timedelta(days=365 * 2)
                         ).timetuple()
                     )

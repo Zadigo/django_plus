@@ -19,7 +19,7 @@ class Command(BaseCommand):
             action='store_true',
             dest='optimize',
             default=False,
-            help='Remove optimized python bytecode files',
+            help='Remove .pyo files in addition to .pyc files',
         )
         parser.add_argument(
             '--dry-run',
@@ -27,14 +27,14 @@ class Command(BaseCommand):
             action='store_true',
             dest='dry_run',
             default=False,
-            help='Show which files would be removed without actually deleting them',
+            help='Show what files would be removed without actually deleting them',
         )
         parser.add_argument(
             '--path',
             '-p',
             action='store',
             dest='path',
-            help='Specify path to recurse into',
+            help='Specify a custom path to search for .pyc and .pyo files. Defaults to BASE_DIR in settings.',
         )
 
     @signalcommand
@@ -66,12 +66,12 @@ class Command(BaseCommand):
                     self.stdout.write(f'- {self.style.WARNING(item)}')
                     count += 1
                     continue
-                # else:
-                #     try:
-                #         item.unlink()
-                #         self.stdout.write(f'Removed: {item}')
-                #     except Exception as e:
-                #         self.stderr.write(f'Error removing {item}: {e}')
+                else:
+                    try:
+                        item.unlink()
+                        self.stdout.write(f'Removed: {item}')
+                    except FileNotFoundError as e:
+                        self.stderr.write(f'Error removing {item}: {e}')
         self.stdout.write(
             self.style.SUCCESS(
                 f'Found {count} files to remove.'

@@ -62,7 +62,7 @@ class TestSyncS3Command(TestCase):
     #             item.rmdir()
     #     self.media_dir.rmdir()
 
-    def _setup_mock_s3(self, mboto3):
+    def _setup_mock_s3(self, mboto3: Mock):
         mclient = Mock(name='S3Client')
         mclient.return_value.head_object.return_value = {
             'LastModified': timezone.now() - timezone.timedelta(days=500)
@@ -73,22 +73,20 @@ class TestSyncS3Command(TestCase):
         mresource.Bucket = Mock(name='S3Bucket')
         mboto3.Session.return_value.resource = mresource
 
+        return mclient, mresource
 
-    def test_sync_s3_command(self, mboto3):
-        self._setup_mock_s3(mboto3)
+    def test_sync_s3_command(self, mboto3: Mock):
+        mclient, _ = self._setup_mock_s3(mboto3)
         call_command('sync_s3')
 
-        # Check that the S3 client was created with the correct parameters
-        # mboto3.client.assert_called_with(
-        #     's3',
-        #     aws_access_key_id='secret1',
-        #     aws_secret_access_key='secret2',
-        #     region_name=None
-        # )
+        mboto3.Session.assert_called()
+        mclient.return_value.head_object.assert_called()
+        mclient.return_value.upload_file.assert_called()
 
-        # # Check that the upload_fileobj method was called for each file in the media directory
-        # expected_calls = []
-        # for path in self.media_dir.glob('**/*'):
-        #     if path.is_file():
-        #         expected_calls.append(((str(path), 'bucket', str(path.relative_to(self.media_dir))),))
-        # mock_s3_client.upload_fileobj.assert_has_calls(expected_calls, any_order=True)
+    def test_sync_s3_command_with_expiration(self, mboto3: Mock):
+        mclient, _ = self._setup_mock_s3(mboto3)
+        call_command('sync_s3', expires=True, verbosity=True)
+
+        mboto3.Session.assert_called()
+        mclient.return_value.head_object.assert_called()
+        mclient.return_value.upload_file.assert_called()
