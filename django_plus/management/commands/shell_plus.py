@@ -1,47 +1,22 @@
-import inspect
-from collections.abc import Callable
 
 from django.core.management.base import BaseCommand
 
 from django_plus.management.utils import signalcommand
-from django_plus.utils.shell.base import ShellContext, ShellBuilder, ShellCreator, create_shell
+from django_plus.utils.shell.base import create_shell
+from django_plus.utils.shell.checks import DjangoPlusTags
 
 
 class Command(BaseCommand):
     help = "Raises a test Exception named DjangoPlusTestException for testing error reporting integrations."
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        self.runners: list[Callable] = [
-            item for _, item in inspect.getmembers(self) 
-                if hasattr(item, 'runner_flags')
-        ]
+    requires_system_checks = (DjangoPlusTags.shell,)
+    requires_migrations_checks = False
 
     def add_arguments(self, parser):
-        group = parser.add_mutually_exclusive_group()
-
-        for runner in self.runners:
-            help = getattr(runner, 'runner_help', None)
-
-            if help is None:
-                help = f"Run the shell using {runner.runner_name}."
-
-            group.add_argument(
-                *runner.runner_flags,
-                action="store_const",
-                dest="runner",
-                const=runner,
-                help=help,
-            )
+        pass
 
     @signalcommand
     def handle(self, *args, **options):
-        context = ShellCreator(self, options)
-        context.builder = ShellBuilder()
-        shell_instance = context.get_shell()
-        shell_runner = shell_instance()
-        shell_runner()
+        create_shell(self, options)
 
 # # -*- coding: utf-8 -*-
 # import inspect
