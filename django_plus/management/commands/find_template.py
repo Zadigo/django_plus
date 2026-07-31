@@ -1,4 +1,3 @@
-import sys
 
 from django.core.management.base import LabelCommand
 from django.template import TemplateDoesNotExist, loader
@@ -16,6 +15,7 @@ class Command(LabelCommand):
         try:
             template = loader.get_template(template_path).template
         except TemplateDoesNotExist:
-            sys.stderr.write(self.style.WARNING('No template found\n'))
+            self.stderr.write(self.style.WARNING('No template found\n'))
         else:
-            sys.stdout.write(self.style.SUCCESS(template.name))
+            message = f'Template {template.name} found at: {self.style.NOTICE(template.origin.name)}\n'
+            self.stdout.write(message)
