@@ -103,6 +103,7 @@ explicit = true
 [tool.coverage.run]
 omit = [
     "manage.py",
+    "conftest.py",
     "*/migrations/*",
     "*/__init__.py",
     "*/typings.py",
