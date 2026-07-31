@@ -36,7 +36,7 @@ SIGNAL_NAMES = {
 
 
 class Command(BaseCommand):
-    help = 'List all signals by model and signal type'
+    help = 'Lists all signals and their receivers in the project.'
 
     def handle(self, *args, **options):
         model_types = apps.get_models(

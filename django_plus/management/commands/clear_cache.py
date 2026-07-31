@@ -18,7 +18,6 @@ class Command(BaseCommand):
             action='append',
             help='Name of cache to clear'
         )
-
         parser.add_argument(
             '--all',
             '-a',

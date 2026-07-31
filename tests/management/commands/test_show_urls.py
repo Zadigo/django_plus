@@ -4,7 +4,7 @@ from django.core.management import CommandError, call_command
 from django.test import TestCase
 
 
-class TestPrintSettingsCommand(TestCase):
+class TestShowUrlsCommand(TestCase):
     def test_basic_implementation(self):
         out = StringIO()
         call_command('show_urls', stdout=out)

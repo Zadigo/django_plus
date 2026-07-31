@@ -51,12 +51,12 @@ class Command(BaseCommand):
         # how many settings are displayed after filtering.
         setting_keys = _setting_keys.copy()
 
-        filter_by = options.get('filter_by')
-        if filter_by:
-            setting_keys = [
-                key for key in _setting_keys
-                if filter_by in key.lower()
-            ]
+        filter_by: str | None = options.get('filter_by', None)
+        if filter_by is not None:
+            def filter_func(value: str) -> bool:
+                return filter_by.lower() in value.lower()
+
+            setting_keys = list(filter(filter_func, _setting_keys))
 
         settings_dict = {
             key: getattr(settings, key)
