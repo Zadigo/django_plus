@@ -6,7 +6,7 @@ from typing import Any
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from django_plus.utils.shell.runners import AbstractShell, IPython, Plain
+from django_plus.utils.shell.runners import AbstractShell, IPython, Plain, ShellContext
 
 PREFERRED_RUNNERS = [
     'ptipython',
@@ -47,9 +47,15 @@ class AbstractShellBuilder(abc.ABC):
 
 
 class ShellBuilder(AbstractShellBuilder):
+    """A builder class that constructs the shell based on the 
+    provided runner name and options. It also loads all the required
+    elements (e.g. models) into the shell context.
+    """
     def __init__(self):
         self._runner_name: str | None = None
         self._shell: AbstractShell | None = None
+        self._shell_context: ShellContext = ShellContext()
+
         self._runners: dict[str, type[AbstractShell]] = {
             'ipython': IPython,
             'plain': Plain,
@@ -61,7 +67,8 @@ class ShellBuilder(AbstractShellBuilder):
             self._runner_name = 'plain'
 
         if self._shell is None:
-            self._shell = self._runners.get(self._runner_name, Plain)()
+            klass = self._runners.get(self._runner_name, Plain)()
+            self._shell = klass
         return self._shell
 
     def _get_runner_by_flag(self, runner_flag: str) -> Callable | None:
@@ -80,7 +87,12 @@ class ShellBuilder(AbstractShellBuilder):
         pass
 
 
-class ShellContext:
+class ShellCreator:
+    """A class that creates a given shell based on the provided options.
+    It uses the ShellBuilder to construct the shell and load the
+    appropriate runner and models.
+    """
+
     def __init__(self, command: BaseCommand, options: dict[str, Any]):
         self._builder: AbstractShellBuilder = None
         self.options = options
@@ -108,7 +120,7 @@ class ShellContext:
             return self.builder.shell
 
 
-def create_shell(command: BaseCommand, options: dict[str, Any]):
-    context = ShellContext(command, options)
-    context.builder = ShellBuilder()
-    return context.get_shell()
+# def create_shell(command: BaseCommand, options: dict[str, Any]):
+#     creator = ShellCreator(command, options)
+#     creator.builder = ShellBuilder()
+#     return creator.get_shell()

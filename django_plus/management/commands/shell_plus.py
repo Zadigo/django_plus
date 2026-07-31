@@ -4,7 +4,7 @@ from collections.abc import Callable
 from django.core.management.base import BaseCommand
 
 from django_plus.management.utils import signalcommand
-from django_plus.utils.shell import ShellBuilder, ShellContext
+from django_plus.utils.shell.base import ShellContext, ShellBuilder, ShellCreator, create_shell
 
 
 class Command(BaseCommand):
@@ -37,9 +37,11 @@ class Command(BaseCommand):
 
     @signalcommand
     def handle(self, *args, **options):
-        context = ShellContext(self, options)
+        context = ShellCreator(self, options)
         context.builder = ShellBuilder()
-        shell = context.get_shell()
+        shell_instance = context.get_shell()
+        shell_runner = shell_instance()
+        shell_runner()
 
 # # -*- coding: utf-8 -*-
 # import inspect
