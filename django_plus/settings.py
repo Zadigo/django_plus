@@ -3,7 +3,7 @@ import pathlib
 DEBUG = True
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
-
+print('Google', BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
