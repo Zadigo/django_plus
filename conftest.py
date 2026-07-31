@@ -28,5 +28,19 @@ def pytest_configure(config):
             ROOT_URLCONF='tests.testapp.urls',
             DEFAULT_AUTO_FIELD='django.db.models.BigAutoField',
             MEDIA_ROOT='/django_plus/tmp/',
-            STATIC_URL='/static/'
+            STATIC_URL='/static/',
+            AUTH_PASSWORD_VALIDATORS = [
+                {
+                    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+                },
+                {
+                    'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+                },
+                {
+                    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+                },
+                {
+                    'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+                },
+            ]
         )

@@ -1,9 +1,10 @@
-from django.db.models import CharField
-from typing import Any, Optional
-from django.conf import settings
 import string
-from django.utils.crypto import get_random_string
+from typing import Any
+
+from django.conf import settings
 from django.db import models
+from django.db.models import CharField
+from django.utils.crypto import get_random_string
 
 # The maximum number of attempts to generate
 # a unique value before giving up.
@@ -61,7 +62,7 @@ class UniqueFieldMixin:
 class RandomCharField(UniqueFieldMixin, CharField):
     """A CharField that generates a random string when the model instance is saved."""
 
-    def __init__(self, *args, lowercase: bool = False, uppercase: bool = False, include_digits: bool = True, include_alpha: bool = True, include_punctuation: bool = False, max_unique_tries: Optional[int] = None, **kwargs):
+    def __init__(self, *args, lowercase: bool = False, uppercase: bool = False, include_digits: bool = True, include_alpha: bool = True, include_punctuation: bool = False, max_unique_tries: int | None = None, **kwargs):
         """
         Arguments:
             lowercase (bool): Whether to convert the generated string to lowercase. Default is False.
