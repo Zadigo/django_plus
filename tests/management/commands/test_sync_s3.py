@@ -3,12 +3,13 @@ from unittest.mock import Mock, patch
 
 from django.core.management import CommandError, call_command
 from django.test import TestCase, override_settings
+from django.utils import timezone
 
 TEST_DIR = pathlib.Path(__file__).parent.parent.parent.absolute()
 
 
 @patch('django_plus.management.commands.sync_s3.HAS_BOTO', True)
-class TestSyncS3Exceptionss(TestCase):
+class TestSyncS3Exceptions(TestCase):
     def test_raises_exception_when_boto_not_installed(self):
         with patch('django_plus.management.commands.sync_s3.HAS_BOTO', False):
             with self.assertRaises(CommandError):
@@ -61,12 +62,20 @@ class TestSyncS3Command(TestCase):
     #             item.rmdir()
     #     self.media_dir.rmdir()
 
-    def test_sync_s3_command(self, mboto3):
-        # Mock the S3 client and its methods
-        # mock_s3_client = Mock()
-        # mboto3.client.return_value = mock_s3_client
+    def _setup_mock_s3(self, mboto3):
+        mclient = Mock(name='S3Client')
+        mclient.return_value.head_object.return_value = {
+            'LastModified': timezone.now() - timezone.timedelta(days=500)
+        }
+        mboto3.Session.return_value.client = mclient
 
-        # Call the command
+        mresource = Mock(name='S3Resource')
+        mresource.Bucket = Mock(name='S3Bucket')
+        mboto3.Session.return_value.resource = mresource
+
+
+    def test_sync_s3_command(self, mboto3):
+        self._setup_mock_s3(mboto3)
         call_command('sync_s3')
 
         # Check that the S3 client was created with the correct parameters

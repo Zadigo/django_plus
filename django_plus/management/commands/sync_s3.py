@@ -1,7 +1,4 @@
 """
-Sync Media to S3
-================
-
 Django command that scans all files in your settings.MEDIA_ROOT and
 settings.STATIC_ROOT folders and uploads them to S3 with the same directory
 structure.
@@ -109,13 +106,13 @@ class Command(BaseCommand):
         super().__init__(**kwargs)
 
         self.directories: list[str] = []
-        self.media_only = False
-        self.static_only = False
+        self.media_only: bool = False
+        self.static_only: bool = False
         self.filter_list: list[str] = []
         self.prefix = None
-        self.force_upload = False
-        self.verbosity = False
-        self.gzip = False
+        self.force_upload: bool = False
+        self.verbosity: bool = False
+        self.gzip: bool = False
         self.expires = False
         self.skip_count = 0
         self.upload_count = 0
