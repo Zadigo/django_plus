@@ -4,6 +4,8 @@ from django.contrib.auth import password_validation
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.crypto import get_random_string
 
+from django_plus.management.utils import signalcommand
+
 
 class Command(BaseCommand):
     help = "Generate a random password using Django's built-in password generator."
@@ -19,6 +21,7 @@ class Command(BaseCommand):
             help='Password length.'
         )
 
+    @signalcommand
     def handle(self, *args, **options):
         password_length = options.get('length', 16)
 

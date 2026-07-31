@@ -22,6 +22,8 @@ from django.db.models.signals import (
 )
 from django.utils.encoding import force_str
 
+from django_plus.management.utils import signalcommand
+
 SIGNAL_NAMES = {
     pre_init: 'pre_init',
     post_init: 'post_init',
@@ -38,6 +40,7 @@ SIGNAL_NAMES = {
 class Command(BaseCommand):
     help = 'Lists all signals and their receivers in the project.'
 
+    @signalcommand
     def handle(self, *args, **options):
         model_types = apps.get_models(
             include_auto_created=True,

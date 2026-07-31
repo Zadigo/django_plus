@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import FieldError
 from django.core.management.base import BaseCommand
 
+from django_plus.management.utils import signalcommand
 from django_plus.typings import UserModelValuesQueryset
 
 
@@ -198,6 +199,7 @@ class Command(BaseCommand):
         #     help='Optional output file to save the exported data. If not provided, output will be printed to stdout.'
         # )
 
+    @signalcommand
     def handle(self, *args, **options):
         group = options.get('group', None)
 

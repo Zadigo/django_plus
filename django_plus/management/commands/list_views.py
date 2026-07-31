@@ -9,6 +9,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.utils.module_loading import import_string
 from django.views import View
 
+from django_plus.management.utils import signalcommand
+
 
 class Command(BaseCommand):
     help = 'List all the views in the project'
@@ -29,6 +31,7 @@ class Command(BaseCommand):
             for klass in klasses:
                 self.stdout.write(f'  - {klass}')
 
+    @signalcommand
     def handle(self, *args, **options):
         registered_apps: list[str] = []
         for app in apps.get_app_configs():

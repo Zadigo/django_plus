@@ -11,6 +11,8 @@ from django.core.exceptions import ViewDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 from django.urls import URLPattern, URLResolver
 
+from django_plus.management.utils import signalcommand
+
 
 class FormatStyle(enum.Enum):
     DENSE = '{url}\t{module}\t{url_name}\t{decorator}'
@@ -96,6 +98,7 @@ class Command(BaseCommand):
         #     help='Sort the output by the specified fields.',
         # )
 
+    @signalcommand
     def handle(self, *args, **options):
         views = []
         if not hasattr(settings, 'ROOT_URLCONF'):
