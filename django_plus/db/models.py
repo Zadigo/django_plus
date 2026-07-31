@@ -222,8 +222,8 @@ class AbstractUserProfile(AbstractTimeStampModel):
             'notes': self.notes
         }
 
-    @cached_property
-    def age(self):
+    @property
+    def age(self) -> int | None:
         """Calculate and return the user's age based on their date of birth."""
         if self.date_of_birth is not None:
             today = timezone.now().date()

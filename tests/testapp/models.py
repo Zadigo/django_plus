@@ -1,5 +1,6 @@
+from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from django_plus.db.models import (
@@ -8,6 +9,8 @@ from django_plus.db.models import (
     AbstractTitleSlugDescriptionModel,
     AbstractUserProfile,
 )
+
+USER_MODEL = get_user_model()
 
 
 # TODO: Note for testing collect_notes command
@@ -37,7 +40,7 @@ class UserProfile(AbstractUserProfile):
         return self.user.username
 
 
-@receiver(pre_save, sender=Book)
-def pre_save_receiver(sender, instance, **kwargs):
-    # Signal for testing list_signals command
-    pass
+@receiver(post_save, sender=USER_MODEL)
+def post_save_receiver(instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
