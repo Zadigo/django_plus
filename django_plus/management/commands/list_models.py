@@ -60,7 +60,6 @@ class Command(BaseCommand):
         model_name: str | None = options.get('model', None)
 
         models = apps.get_models()
-
         _sorted_models = sorted(models, key=lambda m: (m._meta.app_label, m._meta.model_name))
 
         for model in _sorted_models:
@@ -70,13 +69,13 @@ class Command(BaseCommand):
                 continue
 
             # Write the model's app label and model name to the output
-            self.stdout.write(fullname)
+            self.stdout.write(self.style.SUCCESS(fullname))
             self.stdout.write(Spacing.TAB.value + self.style.NOTICE("Fields:"))
 
             # Write each field's name and class to the output, 
             # optionally including the database type
             for field in model._meta.get_fields():
-                info = f"{field.name} - {field.__class__.__name__}"
+                info = f"{field.name} - {self.style.MIGRATE_HEADING(field.__class__.__name__)}"
 
                 if options.get('database_type', False):
                     try:
@@ -94,6 +93,8 @@ class Command(BaseCommand):
                 methods_message = methods_message.format(display="(all)")
             else:
                 methods_message = methods_message.format(display="(default)")
+
+            self.stdout.write(Spacing.TAB.value + self.style.NOTICE(methods_message))
 
             for name in dir(model):
                 func = getattr(model, name, None)
@@ -128,4 +129,5 @@ class Command(BaseCommand):
                     if logic:
                         self.stdout.write(Spacing.TAB.value * 2 + f"{name}() - custom method")
 
-            self.stdout.write(self.style.SUCCESS(f"Total models listed: {len(models)}"))
+            self.stdout.write(self.style.SUCCESS('\n' + Spacing.TAB.value + f"Total models listed: {len(models)}"))
+            self.stdout.write('\n')
