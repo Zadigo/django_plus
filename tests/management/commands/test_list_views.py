@@ -5,7 +5,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
 
-TEST_DIR = pathlib.Path(__file__).parent.parent.parent
+TEST_DIR = pathlib.Path(__file__).parent.parent.parent.resolve() / 'testapp'
 
 
 @override_settings(BASE_DIR=TEST_DIR, INSTALLED_APPS=['django_plus', 'tests.testapp'])

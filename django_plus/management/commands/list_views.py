@@ -1,7 +1,7 @@
 import inspect
 import pathlib
 from collections import defaultdict
-from collections.abc import Iterator, Sequence
+from collections.abc import Iterator
 
 from django.apps import apps
 from django.conf import settings
@@ -10,26 +10,25 @@ from django.utils.module_loading import import_string
 from django.views import View
 
 from django_plus.management.utils import signalcommand
+from django_plus.utils.spacing import Spacing
 
 
 class Command(BaseCommand):
     help = 'List all the views in the project'
-    requires_system_checks: Sequence = []
 
-    def _collect_view_file(self, files: Iterator[pathlib.Path]):
+    def _collect_view_file(self, files: Iterator[pathlib.Path]) -> Iterator[pathlib.Path]:
         for file in files:
             if file.is_dir():
                 continue
 
-            if file.suffix in ['.py']:
-                if file.name == 'views.py':
-                    yield file
+            if file.suffix in ['.py'] and file.name == 'views.py':
+                yield file
 
     def _print_views(self, views: dict[str, list[str]]):
         for app_name, klasses in views.items():
-            self.stdout.write(f'App: {app_name}')
+            self.stdout.write(self.style.SUCCESS(app_name))
             for klass in klasses:
-                self.stdout.write(f'  - {klass}')
+                self.stdout.write(Spacing.TAB_MINUS.value + klass)
 
     @signalcommand
     def handle(self, *args, **options):

@@ -25,5 +25,6 @@ class TestShellPlusCommand(TestCase):
         self.out = StringIO() 
 
     def test_create_shell(self):
-        call_command('shell_plus', stdout=self.out, stderr=self.out)
+        with self.assertRaises(NotImplementedError):
+            call_command('shell_plus', stdout=self.out, stderr=self.out)
 

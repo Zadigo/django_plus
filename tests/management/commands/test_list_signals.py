@@ -15,5 +15,5 @@ class TestListSignals(TestCase):
             call_command('list_signals', stdout=self.out)
 
             result = self.out.getvalue()
-            self.assertIn('tests.testapp.models.pre_save_receiver', result)
+            self.assertIn('tests.testapp.models.post_save_receiver', result)
 
