@@ -15,7 +15,7 @@ class Command(BaseCommand):
     @signalcommand
     def handle(self, *args, **options):
         media_root: pathlib.Path = getattr(settings, 'MEDIA_ROOT', None)
-        print(media_root)
+
         if isinstance(media_root, str):
             base_dir = getattr(settings, 'BASE_DIR', None)
             if base_dir is not None:
