@@ -1,5 +1,6 @@
-cov_html
-staticfiles
-.venv
-.coverage
-tmp
+prune cov_html
+prune staticfiles
+prune .venv
+prune tmp
+
+exclude .coverage

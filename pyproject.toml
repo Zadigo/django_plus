@@ -1,6 +1,6 @@
 [project]
 name = "django-plus"
-version = "0.2.0.dev2"
+version = "0.2.0.dev3"
 description = "An application that provides a set of tools and utilities to enhance the development experience with Django."
 readme = "README.md"
 requires-python = ">=3.14"
