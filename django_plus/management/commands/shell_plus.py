@@ -2,7 +2,6 @@
 from django.core.management.base import BaseCommand
 
 from django_plus.management.utils import signalcommand
-from django_plus.utils.shell.base import create_shell
 from django_plus.utils.shell.checks import DjangoPlusTags
 
 
@@ -16,7 +15,8 @@ class Command(BaseCommand):
 
     @signalcommand
     def handle(self, *args, **options):
-        create_shell(self, options)
+        raise NotImplementedError("This command is not implemented yet.")
+        # create_shell(self, options)
 
 # # -*- coding: utf-8 -*-
 # import inspect
