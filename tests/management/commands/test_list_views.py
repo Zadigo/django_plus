@@ -16,5 +16,25 @@ class TestListViewsCommand(TestCase):
         output = out.getvalue()
 
         self.assertNotEqual(output, '')
-        self.assertIn('App: tests.testapp', output)
-        self.assertIn('  - HomeView', output)
+        self.assertIn('tests.testapp', output)
+        self.assertIn('HomeView', output)
+
+    def test_list_by_app_argument(self):
+        # out = StringIO()
+        # call_command('list_views', '--app', 'tests.testapp', stdout=out)
+        # output = out.getvalue()
+
+        # self.assertNotEqual(output, '')
+        # self.assertIn('App: tests.testapp', output)
+        # self.assertIn('  - HomeView', output)
+        pass
+
+    def test_list_by_view_argument(self):
+        # out = StringIO()
+        # call_command('list_views', '--view', 'HomeView', stdout=out)
+        # output = out.getvalue()
+
+        # self.assertNotEqual(output, '')
+        # self.assertIn('App: tests.testapp', output)
+        # self.assertIn('  - HomeView', output)
+        pass

@@ -53,12 +53,32 @@ class Command(BaseCommand):
                 superclass_names_output = ' (' + ', '.join(superclass_names) + ')' if superclass_names else ''
                 self.stdout.write(Spacing.TAB_MINUS.value + klass + self.style.MIGRATE_LABEL(superclass_names_output))
 
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--by-app',
+            type=str,
+            help='Specify the app to list views for. If not provided, all apps will be listed.',
+        )
+        parser.add_argument(
+            '--by-view',
+            type=str,
+            help='Specify the view to list. If not provided, all views will be listed.',
+        )
+
     @signalcommand
     def handle(self, *args, **options):
+        by_app: str | None = options.get('by_app')
+        by_view: str | None = options.get('by_view')
+
         registered_apps: list[str] = []
         for app in apps.get_app_configs():
             if app.name.startswith('django.contrib'):
                 continue
+
+            if by_app is not None and app.name != by_app:
+                continue
+
             registered_apps.append(app.name)
 
         base_dir: pathlib.Path = getattr(settings, 'BASE_DIR', None)
@@ -84,6 +104,9 @@ class Command(BaseCommand):
                         lambda base: base.__name__ in BASE_DJANGO_VIEWS,
                         inspect.getmro(klass)
                     )
+
+                    if by_view is not None and by_view.lower() not in klass.__name__.lower():
+                        continue
 
                     superclass_names = [base.__name__ for base in superclass]
                     listed_views[app_name].append((klass.__name__, superclass_names))
