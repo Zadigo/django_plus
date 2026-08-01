@@ -1,0 +1,5 @@
+cov_html
+staticfiles
+.venv
+.coverage
+tmp

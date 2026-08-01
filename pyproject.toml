@@ -1,6 +1,6 @@
 [project]
 name = "django-plus"
-version = "0.2.0.dev1"
+version = "0.2.0.dev2"
 description = "An application that provides a set of tools and utilities to enhance the development experience with Django."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -117,4 +117,20 @@ exclude_lines = [
     "raise NotImplementedError",
     "if TYPE_CHECKING:",
     "if __name__ == .__main__.:",
+]
+
+[tool.uv.build-backend]
+source-exclude = [
+    "tests/**",
+    "docs/**",
+    "*.log",
+    "**/.DS_Store",
+    "cov_html/**",
+    "staticfiles/**",
+    "static/**",
+    "media/**",
+    "venv/**",
+    "__pycache__/**",
+    ".coverage",
+    "tmp/**",
 ]
