@@ -12,6 +12,27 @@ from django.views import View
 from django_plus.management.utils import signalcommand
 from django_plus.utils.spacing import Spacing
 
+type ListedViews = dict[str, list[tuple[str, list[str]]]]
+
+BASE_DJANGO_VIEWS = [
+    'TemplateView',
+    'RedirectView',
+    'DetailView',
+    'ListView',
+    'CreateView',
+    'DateDetailView',
+    'DayArchiveView',
+    'ArchiveIndexView',
+    'DeleteView',
+    'FormView',
+    'UpdateView',
+    'MonthArchiveView',
+    'WeekArchiveView',
+    'TodayArchiveView',
+    'View',
+    'YearArchiveView',
+]
+
 
 class Command(BaseCommand):
     help = 'List all the views in the project'
@@ -24,11 +45,13 @@ class Command(BaseCommand):
             if file.suffix in ['.py'] and file.name == 'views.py':
                 yield file
 
-    def _print_views(self, views: dict[str, list[str]]):
+    def _print_views(self, views: ListedViews):
         for app_name, klasses in views.items():
             self.stdout.write(self.style.SUCCESS(app_name))
-            for klass in klasses:
-                self.stdout.write(Spacing.TAB_MINUS.value + klass)
+
+            for klass, superclass_names in klasses:
+                superclass_names_output = ' (' + ', '.join(superclass_names) + ')' if superclass_names else ''
+                self.stdout.write(Spacing.TAB_MINUS.value + klass + self.style.MIGRATE_LABEL(superclass_names_output))
 
     @signalcommand
     def handle(self, *args, **options):
@@ -42,7 +65,7 @@ class Command(BaseCommand):
         if base_dir is None:
             raise CommandError('BASE_DIR is not defined in settings.')
 
-        listed_views = defaultdict(list)
+        counter: int = 0
 
         for app_name in registered_apps:
             try:
@@ -50,28 +73,21 @@ class Command(BaseCommand):
             except Exception: # noqa
                 continue
 
-            klasses = inspect.getmembers(mod, inspect.isclass)
+            listed_views: ListedViews = defaultdict(list)
+
+            klasses = inspect.getmembers(mod, predicate=inspect.isclass)
             for _, klass in klasses:
                 if issubclass(klass, View):
-                    listed_views[app_name].append(klass.__name__)
+                    # Get the superclass of the view in order to get the
+                    # the cateogry of the view (e.g., TemplateView, ListView, etc.)
+                    superclass = filter(
+                        lambda base: base.__name__ in BASE_DJANGO_VIEWS,
+                        inspect.getmro(klass)
+                    )
 
-        # view_files = defaultdict(list)
-        # for app_name in registered_apps:
-        #     fullpath = base_dir.joinpath(app_name.replace('.', '/'))
-        #     if not fullpath.exists():
-        #         continue
-
-        #     candidate = list(self._collect_view_file(fullpath.rglob('*')))
-        #     if candidate:
-        #         view_files[app_name].extend(candidate)
-
-        # listed_views = defaultdict(list)
-
-        # for app_name, files in view_files.items():
-        #     mod = import_string(f'{app_name}.views')
-        #     klasses = inspect.getmembers(mod, inspect.isclass)
-        #     for _, klass in klasses:
-        #         if issubclass(klass, View):
-        #             listed_views[app_name].append(klass.__name__)
+                    superclass_names = [base.__name__ for base in superclass]
+                    listed_views[app_name].append((klass.__name__, superclass_names))
+                    counter += 1
 
         self._print_views(listed_views)
+        self.stdout.write('\n' + self.style.SUCCESS(f'Total views found: {counter}'))
