@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from django_plus.management.utils import signalcommand
+from django_plus.utils.spacing import Spacing
 
 START_REGEX = re.compile(
     r"\{?#[\s]*?(TODO|FIXME|BUG|HACK|WARNING|NOTE|XXX)[\s:]?(.+)"
@@ -38,7 +39,7 @@ class Command(BaseCommand):
             if lines:
                 for line in lines:
                     self.stdout.write(
-                        self.style.SUCCESS("   + ") + line
+                        self.style.SUCCESS(Spacing.TAB_PLUS.value) + line
                     )
 
     def _iterate_files(self, app: str, files: Iterator[pathlib.Path]):
@@ -46,7 +47,7 @@ class Command(BaseCommand):
 
         _files = list(files)
         if len(_files) > 0:
-            self.stdout.write(f'{len(_files)} notes from "{app}" application:')
+            self.stdout.write(self.style.SUCCESS(f'{len(_files)} notes from "{app}" application:'))
 
         for file in _files:
             with file.open() as f:
@@ -58,5 +59,6 @@ class Command(BaseCommand):
                         if END_REGEX.search(message.strip()):
                             text = END_REGEX.findall(message.strip())[0][0]
                         lines.append(
-                            f'{file}:{linenumber} [{tag}] {text.strip()}')
+                            f'{self.style.MIGRATE_LABEL(tag)}: {file}:{linenumber} {text.strip()}'
+                        )
         return lines

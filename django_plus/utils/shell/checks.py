@@ -7,5 +7,5 @@ class DjangoPlusTags(Tags):
 
 @register(DjangoPlusTags.shell)
 def check_shell_plus_settings(app_configs, **kwargs):
-    print(app_configs)
+    print('check_shell_plus_settings', app_configs)
     return []
